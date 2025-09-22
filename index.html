@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>IDphotoHELPER V.1</title>
+    <style>
+      body { margin: 0; padding: 0; }
+      input[type="text"], input[type="number"], select { text-align: center !important; }
+      input[type="number"] { outline: none !important; border: 2px solid #0367E0 !important; box-shadow: none !important; }
+      input[type="number"]:focus { outline: none !important; border: 2px solid #348FF4 !important; box-shadow: none !important; }
+      input[type="number"]:invalid { border: 2px solid #0367E0 !important; box-shadow: none !important; }
+      .clickable-button { cursor: pointer !important; user-select: none; }
+      .clickable-button:hover { opacity: 0.9; }
+      .clickable-button:active { transform: scale(0.98); }
+    </style>
+  </head>
+  <body>
+    <div class="main" style="width: 376px; height: 1330px; position: relative; background: white; overflow: hidden;">
+      <div class="bg" style="width: 376px; height: 1330px; left: 0; top: 0; position: absolute; background: #2D2D2D;"></div>
+      <div class="canvas" style="width: 327.74px; height: 1160px; left: 23.77px; top: 117.41px; position: absolute; background: #353535; border-radius: 14.41px;"></div>
+      <div class="title" style="left: 50%; top: 27.37px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: #D9D9D9; font-size: 28px; font-family: Inter; font-weight: 700; word-wrap: break-word; width: 300px; transform: translateX(-50%);">IDphotoHELPER V.1</div>
+      <div class="copyright" style="left: 50%; top: 65px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: #EBEBEB; font-size: 9px; font-family: Inter; font-weight: 400; line-height: 12px; word-wrap: break-word; width: 296px; transform: translateX(-50%);">This plugin is an original creation of 클라우드가 다른 사진관<br/>Reproduction and redistribution are not permitted.</div>
+      
+      <div style="left: 50%; top: 140px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; align-items: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; word-wrap: break-word; width: 300px; transform: translateX(-50%);">
+        <div style="width: 270px; height: 180px; border: 2px solid #348FF4; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #1D1D1D; margin-bottom: 10px;">
+          <img id="thumbnailElement" alt="thumbnail image" style="max-width: 266px; max-height: 176px; object-fit: contain; border-radius: 6px; display: none; transition: opacity 0.3s ease;" />
+          <div id="thumbnailPlaceholder" style="color: #666; font-size: 12px; text-align: center;">썸네일이 여기에<br/>자동으로 표시됩니다</div>
+        </div>
+      </div>
+
+      <div class="image-preset" style="left: 50%; top: 351px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">IMAGE Preset [ 저장설정 ]</div>
+      <select id="presetSelect" class="ip-box" style="width: 216.81px; height: 27.77px; left: 79.23px; top: 375px; position: absolute; background: #0367E0; border: 2px solid #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; -webkit-appearance: auto; -moz-appearance: auto; appearance: auto; padding: 0; text-align: center;">
+        <option value="" style="background: #0367E0; color: white;">PRESET 선택</option>
+      </select>
+      <div class="add-button-1 clickable-button" onclick="addImagePreset()" style="width: 60px; height: 25px; left: 120px; top: 415px; position: absolute; background: #0367E0; border-radius: 5px; justify-content: center; align-items: center; display: flex; box-shadow: 0px 1.44px 4.32px rgba(0, 0, 0, 0.5); color: white; font-family: 'Source Sans Pro'; font-size: 12px; font-weight: 600;">추가</div>
+      <div class="remove-button-1 clickable-button" onclick="removeImagePreset()" style="width: 60px; height: 25px; left: 190px; top: 415px; position: absolute; background: #C2185B; border-radius: 5px; justify-content: center; align-items: center; display: flex; box-shadow: 0px 1.44px 4.32px rgba(0, 0, 0, 0.5); color: white; font-family: 'Source Sans Pro'; font-size: 12px; font-weight: 600;">삭제</div>
+      
+      <div class="image-size" style="left: 50%; top: 471px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">IMAGE Size [ 가로 x 세로, cm]</div>
+      <input id="widthInput" type="number" step="0.1" placeholder="가로(cm)" style="width: 100px; height: 27.77px; left: 79.23px; top: 495px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; padding: 0;" />
+      <div class="x" style="left: 50%; top: 499px; position: absolute; text-align: center; color: white; font-size: 14.41px; font-family: 'Source Sans Pro'; font-weight: 600; width: 20px; transform: translateX(-50%);">X</div>
+      <input id="heightInput" type="number" step="0.1" placeholder="세로(cm)" style="width: 100px; height: 27.77px; left: 196px; top: 495px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; padding: 0;" />
+      
+      <div class="resolution" style="left: 50%; top: 541px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">RESOLUTION [ 해상도 선택]</div>
+      <input id="resolutionInput" type="number" placeholder="해상도" style="width: 100px; height: 27.77px; left: 79.23px; top: 565px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; padding: 0;" />
+      <select id="resolutionUnitSelect" class="resolution-pixels-box" style="width: 100px; height: 27.77px; left: 196px; top: 565px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; -webkit-appearance: auto; -moz-appearance: auto; appearance: auto; padding: 0; text-align: center;">
+        <option value="ppi" style="background: #0367E0; color: white;">Pixels/Inch</option>
+        <option value="ppcm" style="background: #0367E0; color: white;">Pixels/Centimeter</option>
+      </select>
+      
+      <div class="face-size" style="left: 50%; top: 611px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">FACE Size [ 얼굴길이, cm]</div>
+      <input id="faceSizeInput" type="number" step="0.1" placeholder="얼굴길이(cm)" style="width: 216px; height: 27.77px; left: 79.23px; top: 635px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; padding: 0;" />
+      
+      <div class="headroom" style="left: 50%; top: 681px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">HEADROOM [머리위 여백, cm]</div>
+      <input id="headroomInput" type="number" step="0.1" placeholder="머리위 여백(cm)" style="width: 216px; height: 27.77px; left: 79.23px; top: 705px; position: absolute; background: #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; padding: 0;" />
+      
+      <div class="background-color" style="left: 50%; top: 761px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">BACKGROUND COLOR</div>
+      <input type="checkbox" id="whiteBackgroundCheck" checked style="width: 24px; height: 24px; left: 83.56px; top: 783px; position: absolute; accent-color: #0367E0; cursor: pointer;" />
+      <div class="white" style="left: 121.73px; top: 786px; position: absolute; text-align: center; color: white; font-size: 14.41px; font-family: 'Source Sans Pro'; font-weight: 600;">WHITE</div>
+      <input type="color" id="backgroundColorPicker" value="#348FF4" style="width: 24px; height: 24px; left: 206.01px; top: 783px; position: absolute; border: none; cursor: pointer; border-radius: 3px;" />
+      <div class="select" style="left: 244.18px; top: 786px; position: absolute; text-align: center; color: white; font-size: 14.41px; font-family: 'Source Sans Pro'; font-weight: 600;">SELECT</div>
+      
+      <div class="enable-button clickable-button" onclick="createFaceSizeBasedIDPhoto()" style="width: 160px; height: 45px; left: 50%; top: 836px; position: absolute; background: #C2185B; border-radius: 8px; justify-content: center; align-items: center; display: flex; transform: translateX(-50%); box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);">
+        <div class="enable" style="text-align: center; color: white; font-size: 16px; font-family: 'Source Sans Pro'; font-weight: 600;">Enable</div>
+      </div>
+      
+      <div class="preview-button clickable-button" onclick="showBeforeAfterPreview()" style="width: 218.97px; height: 62.67px; left: 50%; top: 915px; position: absolute; background: #0367E0; border-radius: 36.02px; justify-content: center; align-items: center; display: flex; transform: translateX(-50%); box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);">
+         <div class="button-label" style="text-align: center; color: white; font-size: 16px; font-family: 'Source Sans Pro'; font-weight: 600; line-height: 20px;">Before & After<br/>PREVIEW</div>
+       </div>
+      
+      <div class="save" style="left: 50%; top: 1010px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 250px; transform: translateX(-50%);">Save [ 원본+업로드용파일자동생성 ]</div>
+      <select class="save-dropdown" style="width: 216.81px; height: 27.77px; left: 79.23px; top: 1035px; position: absolute; background: #0367E0; border: 2px solid #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; text-align: center; text-align-last: center; -webkit-appearance: auto; -moz-appearance: auto; appearance: auto; padding: 0;">
+        <option value="" style="background: #0367E0; color: white;">저장 형식 선택</option>
+        <option value="반명함" style="background: #0367E0; color: white;">반명함</option>
+        <option value="면허증" style="background: #0367E0; color: white;">면허증</option>
+        <option value="민증" style="background: #0367E0; color: white;">민증</option>
+        <option value="여권" style="background: #0367E0; color: white;">여권</option>
+        <option value="미국비자" style="background: #0367E0; color: white;">미국비자</option>
+        <option value="인도비자" style="background: #0367E0; color: white;">인도비자</option>
+        <option value="캐나다비자" style="background: #0367E0; color: white;">캐나다비자</option>
+        <option value="중국비자" style="background: #0367E0; color: white;">중국비자</option>
+      </select>
+      <div class="save-preset clickable-button" onclick="saveToFile()" style="width: 60px; height: 25px; left: 120px; top: 1075px; position: absolute; background: #0367E0; border-radius: 5px; justify-content: center; align-items: center; display: flex; box-shadow: 0px 1.44px 4.32px rgba(0, 0, 0, 0.5); color: white; font-family: 'Source Sans Pro'; font-size: 12px; font-weight: 600;">저장</div>
+      <div class="remove-preset clickable-button" onclick="removeSavePreset()" style="width: 60px; height: 25px; left: 190px; top: 1075px; position: absolute; background: #C2185B; border-radius: 5px; justify-content: center; align-items: center; display: flex; box-shadow: 0px 1.44px 4.32px rgba(0, 0, 0, 0.5); color: white; font-family: 'Source Sans Pro'; font-size: 12px; font-weight: 600;">삭제</div>
+      
+      <div style="left: 50%; top: 1130px; position: absolute; text-align: center; color: white; font-size: 14px; font-family: 'Source Sans Pro'; font-weight: 600; width: 200px; transform: translateX(-50%);">Auto batch [자동사진배치]</div>
+      <select class="autobatch-papersize-box" style="width: 93.64px; height: 27.77px; left: 79.95px; top: 1155px; position: absolute; background: #0367E0; border: 2px solid #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; text-align: center; text-align-last: center; -webkit-appearance: auto; -moz-appearance: auto; appearance: auto; padding: 0;">
+        <option value="" style="background: #0367E0; color: white;">용지 크기</option>
+        <option value="4R" style="background: #0367E0; color: white;">4R</option>
+        <option value="5R" style="background: #0367E0; color: white;">5R</option>
+        <option value="A4" style="background: #0367E0; color: white;">A4</option>
+        <option value="A3" style="background: #0367E0; color: white;">A3</option>
+        <option value="Letter" style="background: #0367E0; color: white;">Letter</option>
+      </select>
+      <select class="photobatch-box" style="width: 117.77px; height: 27.77px; left: 177.92px; top: 1155px; position: absolute; background: #0367E0; border: 2px solid #0367E0; border-radius: 5px; color: white; font-family: 'Source Sans Pro'; font-size: 14px; text-align: center; text-align-last: center; -webkit-appearance: auto; -moz-appearance: auto; appearance: auto; padding: 0;">
+        <option value="" style="background: #0367E0; color: white;">사진 배치</option>
+        <option value="1x1" style="background: #0367E0; color: white;">1x1</option>
+        <option value="2x2" style="background: #0367E0; color: white;">2x2</option>
+        <option value="3x3" style="background: #0367E0; color: white;">3x3</option>
+        <option value="4x4" style="background: #0367E0; color: white;">4x4</option>
+      </select>
+      
+      <div class="primary-button clickable-button" onclick="startPrinter()" style="width: 218.97px; height: 62.67px; left: 50%; top: 1210px; position: absolute; background: #C2185B; border-radius: 36.02px; justify-content: center; align-items: center; display: flex; transform: translateX(-50%); box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3); margin-bottom: 40px;">
+          <div class="printer-start" style="text-align: center; color: white; font-size: 18px; font-family: 'Source Sans Pro'; font-weight: 600;">PRINTER START</div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
